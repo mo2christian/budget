@@ -1,0 +1,18 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+    - build
+    - -f
+    - src/main/docker/Dockerfile.multistage
+    - -t
+    - gcr.io/${PROJECT_ID}/budget-api:${_VERSION}
+    - .
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+    - push
+    - gcr.io/${PROJECT_ID}/budget-api:${_VERSION}
+timeout: 600s
+substitutions:
+  _VERSION: '0.1'
+options:
+  machineType: 'N1_HIGHCPU_32'
