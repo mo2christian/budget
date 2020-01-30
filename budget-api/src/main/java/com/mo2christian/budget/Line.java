@@ -1,6 +1,8 @@
 package com.mo2christian.budget;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -9,22 +11,27 @@ import java.util.Objects;
         @NamedQuery(name = Line.FIND_ALL, query = "SELECT l FROM Line l")
 })
 @Table(name = "line")
+@Cacheable
 public class Line {
 
     public static final String FIND_ALL="Line.findAll";
 
+    @NotNull
     @Id
     @Column(name = "id", nullable = false, unique = true)
     @GeneratedValue(generator = "line_seq", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "line_seq", sequenceName = "line_seq", allocationSize = 1)
     private long id;
 
+    @NotBlank
     @Column(name = "label", nullable = false)
     private String label;
 
+    @NotNull
     @Column(name = "amount", nullable = false)
     private BigDecimal amount;
 
+    @NotNull
     @AttributeOverride(name = "value", column = @Column(name = "type", nullable = false))
     @Embedded
     private LineType type;

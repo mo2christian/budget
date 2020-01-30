@@ -11,14 +11,14 @@ public class LineDto implements Serializable {
 
     private long id;
 
-    @NotBlank
+    @NotBlank(message = "Label is required")
     private String label;
 
-    @NotNull
-    @Min(0)
+    @NotNull(message = "Amount is required")
+    @Min(value = 0,message = "Min value is 0")
     private BigDecimal amount;
 
-    @NotNull
+    @NotNull(message = "Type is required")
     private LineType type;
 
     public LineDto() {
@@ -54,6 +54,14 @@ public class LineDto implements Serializable {
 
     public void setType(LineType type) {
         this.type = type;
+    }
+
+    public boolean isDebit(){
+        return LineType.DEBIT.equals(type);
+    }
+
+    public boolean isCredit(){
+        return LineType.CREDIT.equals(type);
     }
 
     @Override

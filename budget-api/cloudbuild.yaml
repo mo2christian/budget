@@ -13,6 +13,6 @@ steps:
     - gcr.io/${PROJECT_ID}/budget-api:${_VERSION}
 timeout: 600s
 substitutions:
-  _VERSION: '0.1'
+  _VERSION: '0.1.3'
 options:
   machineType: 'N1_HIGHCPU_32'

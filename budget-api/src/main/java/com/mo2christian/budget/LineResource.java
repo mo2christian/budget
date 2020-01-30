@@ -1,97 +1,130 @@
 package com.mo2christian.budget;
 
+import io.quarkus.qute.Template;
+import io.quarkus.qute.TemplateInstance;
+
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import javax.validation.Validator;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Path("/line")
-@Produces(MediaType.APPLICATION_JSON)
 public class LineResource {
 
     @Inject
-    EntityManager em;
+    Template line;
+
+    @Inject
+    Validator validator;
+
+    private LineService lineService;
+
+    @Inject
+    public LineResource(LineService lineService) {
+        this.lineService = lineService;
+    }
 
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String hello() {
-        return "hello world";
+    public TemplateInstance getAll(){
+        return build(Collections.EMPTY_LIST);
+    }
+
+    @Path("/delete/{id}")
+    @GET
+    @Transactional
+    public TemplateInstance delete(@PathParam("id") Long id){
+        Optional<Line> line = lineService.get(id);
+        if (!line.isPresent()){
+            List<String> errors = Arrays.asList(String.format("Line %d not found", id));
+            return build(errors);
+        }
+        lineService.delete(line.get());
+        return build(Collections.EMPTY_LIST);
+    }
+
+    @POST
+    @Path("/add")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Transactional
+    public TemplateInstance save(@FormParam("label") String label, @FormParam("amount") BigDecimal amount, @FormParam("type") LineType type){
+        LineDto dto = new LineDto();
+        dto.setAmount(amount);
+        dto.setLabel(label);
+        dto.setType(type);
+        List<String> errors = validate(dto);
+        if (errors.isEmpty())
+            lineService.add(LineMapper.INSTANCE.toLine(dto));
+        return build(errors);
     }
 
     @POST
     @Transactional
+    @Produces(MediaType.APPLICATION_JSON)
     public Response add(@Valid LineDto lineDto){
-        Line line = toLine(lineDto);
-        em.persist(line);
+        Line line = LineMapper.INSTANCE.toLine(lineDto);
+        lineService.add(line);
         return Response.ok().build();
-    }
-
-    @GET
-    public Response getAll(){
-        List<LineDto> dtos = em.createNamedQuery(Line.FIND_ALL, Line.class)
-                .getResultList()
-                .stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
-        return Response.ok(dtos)
-                .build();
     }
 
     @PUT
     @Transactional
+    @Produces(MediaType.APPLICATION_JSON)
     public Response update(@Valid LineDto dto){
-        Line line = em.find(Line.class, dto.getId());
-        if (line == null)
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        Line line = lineService.get(dto.getId())
+                .orElseThrow(() -> new WebApplicationException(Response.Status.NOT_FOUND));
         line.setType(dto.getType());
         line.setLabel(dto.getLabel());
         line.setAmount(dto.getAmount());
-        em.persist(line);
+        lineService.add(line);
         return Response.ok().build();
     }
 
     @Path("{id}")
     @DELETE()
     @Transactional
+    @Produces(MediaType.APPLICATION_JSON)
     public Response delete(@PathParam("id") long id){
-        Line line = em.find(Line.class, id);
-        if (line == null)
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
-        em.remove(line);
+        Line line = lineService.get(id)
+                .orElseThrow(() -> new WebApplicationException(Response.Status.NOT_FOUND));
+        lineService.delete(line);
         return Response.ok().build();
     }
 
     @Path("{id}")
     @GET
     @Transactional
+    @Produces(MediaType.APPLICATION_JSON)
     public Response get(@PathParam("id") long id){
-        Line line = em.find(Line.class, id);
-        if (line == null)
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        Line line = lineService.get(id)
+                .orElseThrow(() -> new WebApplicationException(Response.Status.NOT_FOUND));
         return Response.ok()
                 .entity(line)
                 .build();
     }
 
-    private Line toLine(LineDto dto){
-        Line line = new Line();
-        line.setAmount(dto.getAmount());
-        line.setLabel(dto.getLabel());
-        line.setType(dto.getType());
-        return line;
+    private TemplateInstance build(List<String> errors){
+        List<LineDto> dtos = lineService.getAll()
+                .stream()
+                .map(LineMapper.INSTANCE::toDto)
+                .collect(Collectors.toList());
+        return line.data("lines", dtos)
+                .data("errors", errors);
     }
 
-    private LineDto toDto(Line line){
-        LineDto dto = new LineDto();
-        dto.setAmount(line.getAmount());
-        dto.setId(line.getId());
-        dto.setLabel(line.getLabel());
-        dto.setType(line.getType());
-        return dto;
+    private List<String> validate(LineDto dto){
+        return validator.validate(dto)
+                .stream()
+                .map(v -> v.getMessage())
+                .collect(Collectors.toList());
     }
+
 }

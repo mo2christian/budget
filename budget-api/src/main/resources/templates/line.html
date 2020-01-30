@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Ligne budgetaire</title>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function(){
+        })
+    </script>
+
+</head>
+<body>
+    <h1>Lignes</h1>
+
+    <ul>
+        {#for error in errors}
+            <li>{error}</li>
+        {/for}
+    </ul>
+    <table>
+        {#for line in lines}
+        <tr>
+            <td>{line.label}</td>
+            <td>{line.amount}</td>
+            <td>{line.type}</td>
+            <td>
+                <a href="/line/delete/{line.id}">Del</a>
+            </td>
+        </tr>
+        {/for}
+    </table>
+
+    <form action="/line/add" method="post">
+        <label>Label</label><input type="text" name="label" required/>
+        <label>Amount</label><input type="number" name="amount" required min="0" />
+        <label>Type</label>
+        <select id="type" name="type">
+            <option value="d">Debit</option>
+            <option value="c">Credit</option>
+        </select>
+        <button>Save</button>
+    </form>
+
+    <a href="/">Budget</a>
+</body>
+</html>
