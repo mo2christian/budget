@@ -3,6 +3,7 @@ package com.mo2christian.budget;
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -41,6 +42,7 @@ public class LineResource {
     @Path("/delete/{id}")
     @GET
     @Transactional
+    @RolesAllowed("user")
     public TemplateInstance delete(@PathParam("id") Long id){
         Optional<Line> line = lineService.get(id);
         if (!line.isPresent()){
@@ -55,6 +57,7 @@ public class LineResource {
     @Path("/add")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Transactional
+    @RolesAllowed("user")
     public TemplateInstance save(@FormParam("label") String label, @FormParam("amount") BigDecimal amount, @FormParam("type") LineType type){
         LineDto dto = new LineDto();
         dto.setAmount(amount);

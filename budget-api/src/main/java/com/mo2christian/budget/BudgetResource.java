@@ -3,6 +3,7 @@ package com.mo2christian.budget;
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -22,6 +23,7 @@ public class BudgetResource {
     }
 
     @GET
+    @RolesAllowed("user")
     public TemplateInstance index(){
         BudgetDto budgetDto = new BudgetDto();
         lineService.getAll()
@@ -41,5 +43,6 @@ public class BudgetResource {
         return budget.data("balance", budgetDto.getBalance())
                 .data("lines", budgetDto.getLines());
     }
+
 
 }
