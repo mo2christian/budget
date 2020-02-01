@@ -2,10 +2,8 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Ligne budgetaire</title>
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
-    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <title>Lines</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
     <script>
         $(document).ready(function(){
@@ -14,37 +12,69 @@
 
 </head>
 <body>
-    <h1>Lignes</h1>
-
+    <nav class="navbar navbar-light bg-light">
+        <a href="/">Budget</a>
+    </nav>
+    <div class="container">
+        <h1>Lignes</h1>
+    </div>
+    <br/>
     <ul>
         {#for error in errors}
             <li>{error}</li>
         {/for}
     </ul>
-    <table>
-        {#for line in lines}
-        <tr>
-            <td>{line.label}</td>
-            <td>{line.amount}</td>
-            <td>{line.type}</td>
-            <td>
-                <a href="/line/delete/{line.id}">Del</a>
-            </td>
-        </tr>
-        {/for}
-    </table>
+    <div class="container">
+        <table class="table table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="row">Label</th>
+                    <th scope="row">Amount</th>
+                    <th scope="row">Type</th>
+                    <th scope="row">Options</th>
+                </tr>
+            </thead>
+            <tbody>
+            {#for line in lines}
+            <tr>
+                <td>{line.label}</td>
+                <td>{line.amount}</td>
+                <td>{line.type}</td>
+                <td>
+                    <a href="/line/delete/{line.id}">Del</a>
+                </td>
+            </tr>
+            {/for}
+            </tbody>
+        </table>
+    </div>
+    <br/>
+    <div class="container">
+        <h2>Add line</h2>
+        <form action="/line/add" method="post">
+            <div class="form-group">
+                <label for="label">Label: </label>
+                <input type="text" class="form-control" name="label" id="label" required/>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-6">
+                    <label for="amount">Amount</label>
+                    <input type="number" class="form-control" id="amount" name="amount" required min="0" />
+                </div>
+                <div class="form-group col-6">
+                    <label for="type">Type</label>
+                    <select id="type" class="form-control" name="type">
+                        <option value="d">Debit</option>
+                        <option value="c">Credit</option>
+                    </select>
+                </div>
+            </div>
+            <input type="submit" class="btn btn-primary" name="save" value="Save">
+        </form>
+    </div>
 
-    <form action="/line/add" method="post">
-        <label>Label</label><input type="text" name="label" required/>
-        <label>Amount</label><input type="number" name="amount" required min="0" />
-        <label>Type</label>
-        <select id="type" name="type">
-            <option value="d">Debit</option>
-            <option value="c">Credit</option>
-        </select>
-        <button>Save</button>
-    </form>
-
-    <a href="/">Budget</a>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 </body>
 </html>
