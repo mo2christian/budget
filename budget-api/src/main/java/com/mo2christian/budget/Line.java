@@ -36,6 +36,12 @@ public class Line {
     @Embedded
     private LineType type;
 
+    private int frequency;
+
+    private String beginPeriod;
+
+    private String endPeriod;
+
     public Line() {
     }
 
@@ -69,6 +75,30 @@ public class Line {
 
     public void setType(LineType type) {
         this.type = type;
+    }
+
+    public int getFrequency() {
+        return frequency;
+    }
+
+    public void setFrequency(int frequency) {
+        this.frequency = frequency;
+    }
+
+    public String getBeginPeriod() {
+        return beginPeriod;
+    }
+
+    public void setBeginPeriod(String beginPeriod) {
+        this.beginPeriod = beginPeriod;
+    }
+
+    public String getEndPeriod() {
+        return endPeriod;
+    }
+
+    public void setEndPeriod(String endPeriod) {
+        this.endPeriod = endPeriod;
     }
 
     @Override
