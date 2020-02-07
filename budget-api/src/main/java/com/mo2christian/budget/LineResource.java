@@ -11,7 +11,6 @@ import javax.validation.Validator;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -58,11 +57,7 @@ public class LineResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Transactional
     @RolesAllowed("user")
-    public TemplateInstance save(@FormParam("label") String label, @FormParam("amount") BigDecimal amount, @FormParam("type") LineType type){
-        LineDto dto = new LineDto();
-        dto.setAmount(amount);
-        dto.setLabel(label);
-        dto.setType(type);
+    public TemplateInstance save(@BeanParam LineDto dto){
         List<String> errors = validate(dto);
         if (errors.isEmpty())
             lineService.add(LineMapper.INSTANCE.toLine(dto));

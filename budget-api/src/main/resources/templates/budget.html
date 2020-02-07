@@ -10,7 +10,17 @@
     <a href="/line">Lines</a>
 </nav>
 <div class="container">
-    <h1>Budget du mois</h1>
+    <div class="row align-items-center">
+        <div class="col">
+            <a href="/{previous.value}">Mois {previous.label}</a>
+        </div>
+        <div class="col">
+            <h1>Budget du mois {now.label}</h1>
+        </div>
+        <div class="col">
+            <a href="/{next.value}">Mois {next.label}</a>
+        </div>
+    </div>
 </div>
 <br/><br/>
 <div class="container">

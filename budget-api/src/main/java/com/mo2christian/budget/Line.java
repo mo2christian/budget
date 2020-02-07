@@ -1,9 +1,11 @@
 package com.mo2christian.budget;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -36,11 +38,19 @@ public class Line {
     @Embedded
     private LineType type;
 
-    private int frequency;
+    @NotNull
+    @Min(1)
+    @Column(name = "frequency", nullable = false)
+    private int frequency = 1;
 
-    private String beginPeriod;
+    @NotNull
+    @Column(name = "begin_period", nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date beginPeriod = new Date();
 
-    private String endPeriod;
+    @Column(name = "end_period")
+    @Temporal(TemporalType.DATE)
+    private Date endPeriod;
 
     public Line() {
     }
@@ -85,20 +95,27 @@ public class Line {
         this.frequency = frequency;
     }
 
-    public String getBeginPeriod() {
+    public Date getBeginPeriod() {
         return beginPeriod;
     }
 
-    public void setBeginPeriod(String beginPeriod) {
+    public void setBeginPeriod(Date beginPeriod) {
         this.beginPeriod = beginPeriod;
     }
 
-    public String getEndPeriod() {
+    public Date getEndPeriod() {
         return endPeriod;
     }
 
-    public void setEndPeriod(String endPeriod) {
+    public void setEndPeriod(Date endPeriod) {
         this.endPeriod = endPeriod;
+    }
+
+    @PrePersist
+    @PreUpdate
+    private void validate(){
+        if (beginPeriod.after(endPeriod))
+            throw new IllegalStateException();
     }
 
     @Override

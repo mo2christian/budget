@@ -20,15 +20,18 @@ public class BudgetDto implements Serializable {
         return lines;
     }
 
-    public void setLines(List<LineDto> lines) {
-        this.lines = lines;
-    }
-
     public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
+    public void add(LineDto dto){
+        lines.add(dto);
+        if (LineType.CREDIT.equals(dto.getType())) {
+            balance = balance.add(dto.getAmount());
+        }
+        else {
+            balance = balance.subtract(dto.getAmount());
+        }
     }
+
 }

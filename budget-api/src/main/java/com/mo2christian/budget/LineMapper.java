@@ -11,6 +11,9 @@ public class LineMapper {
         line.setAmount(dto.getAmount());
         line.setLabel(dto.getLabel());
         line.setType(dto.getType());
+        line.setFrequency(dto.getFrequency());
+        line.setBeginPeriod(dto.getBeginPeriod());
+        line.setEndPeriod(dto.getEndPeriod());
         return line;
     }
 
@@ -20,6 +23,9 @@ public class LineMapper {
         dto.setId(line.getId());
         dto.setLabel(line.getLabel());
         dto.setType(line.getType());
+        dto.setFrequency(line.getFrequency());
+        dto.setBeginPeriod(line.getBeginPeriod());
+        dto.setEndPeriod(line.getEndPeriod());
         return dto;
     }
 
