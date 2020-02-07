@@ -9,7 +9,6 @@ import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.ext.ParamConverter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -45,9 +44,10 @@ public class BudgetResource {
 
     private TemplateInstance build(Date date){
         BudgetDto budgetDto = new BudgetDto();
+        LineMapper mapper = new LineMapper(dateParamConverter);
         lineService.get(date)
                 .stream()
-                .map(LineMapper.INSTANCE::toDto)
+                .map(mapper::toDto)
                 .forEach(dto -> budgetDto.add(dto));
         Calendar next = new GregorianCalendar();
         next.setTime(date);

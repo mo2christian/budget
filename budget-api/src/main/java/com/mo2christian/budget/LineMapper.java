@@ -1,10 +1,14 @@
 package com.mo2christian.budget;
 
+import com.mo2christian.budget.converter.DateParamConverter;
+
 public class LineMapper {
 
-    public static LineMapper INSTANCE = new LineMapper();
+    private final DateParamConverter converter;
 
-    private LineMapper(){}
+    public LineMapper(DateParamConverter converter){
+        this.converter = converter;
+    }
 
     public Line toLine(LineDto dto){
         Line line = new Line();
@@ -26,6 +30,8 @@ public class LineMapper {
         dto.setFrequency(line.getFrequency());
         dto.setBeginPeriod(line.getBeginPeriod());
         dto.setEndPeriod(line.getEndPeriod());
+        dto.setBeginPeriodFormat(converter.toStringLabel(line.getBeginPeriod()));
+        dto.setEndPeriodFormat(converter.toStringLabel(line.getEndPeriod()));
         return dto;
     }
 

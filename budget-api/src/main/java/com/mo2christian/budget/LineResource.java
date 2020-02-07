@@ -1,5 +1,6 @@
 package com.mo2christian.budget;
 
+import com.mo2christian.budget.converter.DateParamConverter;
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
 
@@ -26,11 +27,14 @@ public class LineResource {
     @Inject
     Validator validator;
 
-    private LineService lineService;
+    private final LineService lineService;
+
+    private final LineMapper mapper;
 
     @Inject
-    public LineResource(LineService lineService) {
+    public LineResource(LineService lineService, DateParamConverter converter) {
         this.lineService = lineService;
+        mapper = new LineMapper(converter);
     }
 
     @GET
@@ -60,7 +64,7 @@ public class LineResource {
     public TemplateInstance save(@BeanParam LineDto dto){
         List<String> errors = validate(dto);
         if (errors.isEmpty())
-            lineService.add(LineMapper.INSTANCE.toLine(dto));
+            lineService.add(mapper.toLine(dto));
         return build(errors);
     }
 
@@ -68,7 +72,7 @@ public class LineResource {
     @Transactional
     @Produces(MediaType.APPLICATION_JSON)
     public Response add(@Valid LineDto lineDto){
-        Line line = LineMapper.INSTANCE.toLine(lineDto);
+        Line line = mapper.toLine(lineDto);
         lineService.add(line);
         return Response.ok().build();
     }
@@ -112,7 +116,7 @@ public class LineResource {
     private TemplateInstance build(List<String> errors){
         List<LineDto> dtos = lineService.getAll()
                 .stream()
-                .map(LineMapper.INSTANCE::toDto)
+                .map(mapper::toDto)
                 .collect(Collectors.toList());
         return line.data("lines", dtos)
                 .data("errors", errors);

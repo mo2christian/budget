@@ -114,7 +114,7 @@ public class Line {
     @PrePersist
     @PreUpdate
     private void validate(){
-        if (beginPeriod.after(endPeriod))
+        if (endPeriod != null && beginPeriod.after(endPeriod))
             throw new IllegalStateException();
     }
 

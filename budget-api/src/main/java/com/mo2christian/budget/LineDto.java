@@ -38,6 +38,10 @@ public class LineDto implements Serializable {
     @FormParam("endPeriod")
     private Date endPeriod;
 
+    private String beginPeriodFormat;
+
+    private String endPeriodFormat;
+
     public LineDto() {
     }
 
@@ -103,6 +107,22 @@ public class LineDto implements Serializable {
 
     public void setEndPeriod(Date endPeriod) {
         this.endPeriod = endPeriod;
+    }
+
+    public String getBeginPeriodFormat() {
+        return beginPeriodFormat;
+    }
+
+    public void setBeginPeriodFormat(String beginPeriodFormat) {
+        this.beginPeriodFormat = beginPeriodFormat;
+    }
+
+    public String getEndPeriodFormat() {
+        return endPeriodFormat;
+    }
+
+    public void setEndPeriodFormat(String endPeriodFormat) {
+        this.endPeriodFormat = endPeriodFormat;
     }
 
     @Override
