@@ -43,45 +43,23 @@ public class BudgetResource {
     }
 
     private TemplateInstance build(Date date){
-        BudgetDto budgetDto = new BudgetDto();
-        LineMapper mapper = new LineMapper(dateParamConverter);
-        lineService.get(date)
-                .stream()
-                .map(mapper::toDto)
-                .forEach(dto -> budgetDto.add(dto));
         Calendar next = new GregorianCalendar();
         next.setTime(date);
         next.add(Calendar.MONTH, 1);
         Calendar previous = new GregorianCalendar();
         previous.setTime(date);
         previous.add(Calendar.MONTH, -1);
+        BudgetDto budgetDto = new BudgetDto();
+        LineMapper mapper = new LineMapper(dateParamConverter);
+        lineService.get(date)
+                .stream()
+                .map(mapper::toDto)
+                .forEach(dto -> budgetDto.add(dto));
         return budget.data("balance", budgetDto.getBalance())
                 .data("lines", budgetDto.getLines())
-                .data("previous", render(previous.getTime()))
-                .data("next", render(next.getTime()))
-                .data("now", render(date));
-    }
-
-    private DateRender render(Date date){
-        DateRender render = new DateRender();
-        render.label = dateParamConverter.toStringLabel(date);
-        render.value = dateParamConverter.toString(date);
-        return render;
-    }
-
-    private class DateRender{
-
-        private String label;
-
-        private String value;
-
-        public String getLabel() {
-            return label;
-        }
-
-        public String getValue() {
-            return value;
-        }
+                .data("previous", previous.getTime())
+                .data("next", next.getTime())
+                .data("now", date);
     }
 
 }

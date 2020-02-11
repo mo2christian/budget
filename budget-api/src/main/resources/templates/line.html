@@ -44,8 +44,12 @@
                 <td>{line.amount}</td>
                 <td>{line.type}</td>
                 <td>{line.frequency}</td>
-                <td>{line.beginPeriodFormat}</td>
-                <td>{line.endPeriodFormat}</td>
+                <td>{line.beginPeriod.label}</td>
+                <td>
+                    {#if line.endPeriod ne null}
+                        {line.endPeriod.label}
+                    {/if}
+                </td>
                 <td>
                     <a href="/line/delete/{line.id}">Del</a>
                 </td>

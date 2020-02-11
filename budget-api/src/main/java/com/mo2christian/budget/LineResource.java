@@ -38,6 +38,7 @@ public class LineResource {
     }
 
     @GET
+    @RolesAllowed("user")
     public TemplateInstance getAll(){
         return build(Collections.EMPTY_LIST);
     }

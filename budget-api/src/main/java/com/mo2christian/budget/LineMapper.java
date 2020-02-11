@@ -30,8 +30,6 @@ public class LineMapper {
         dto.setFrequency(line.getFrequency());
         dto.setBeginPeriod(line.getBeginPeriod());
         dto.setEndPeriod(line.getEndPeriod());
-        dto.setBeginPeriodFormat(converter.toStringLabel(line.getBeginPeriod()));
-        dto.setEndPeriodFormat(converter.toStringLabel(line.getEndPeriod()));
         return dto;
     }
 
