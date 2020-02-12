@@ -1,6 +1,7 @@
 package com.mo2christian.budget;
 
 import com.mo2christian.budget.converter.DateParamConverter;
+import com.mo2christian.budget.filter.ApiKey;
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
 
@@ -72,6 +73,7 @@ public class LineResource {
     @POST
     @Transactional
     @Produces(MediaType.APPLICATION_JSON)
+    @ApiKey
     public Response add(@Valid LineDto lineDto){
         Line line = mapper.toLine(lineDto);
         lineService.add(line);
@@ -81,6 +83,7 @@ public class LineResource {
     @PUT
     @Transactional
     @Produces(MediaType.APPLICATION_JSON)
+    @ApiKey
     public Response update(@Valid LineDto dto){
         Line line = lineService.get(dto.getId())
                 .orElseThrow(() -> new WebApplicationException(Response.Status.NOT_FOUND));
@@ -95,6 +98,7 @@ public class LineResource {
     @DELETE()
     @Transactional
     @Produces(MediaType.APPLICATION_JSON)
+    @ApiKey
     public Response delete(@PathParam("id") long id){
         Line line = lineService.get(id)
                 .orElseThrow(() -> new WebApplicationException(Response.Status.NOT_FOUND));
@@ -106,6 +110,7 @@ public class LineResource {
     @GET
     @Transactional
     @Produces(MediaType.APPLICATION_JSON)
+    @ApiKey
     public Response get(@PathParam("id") long id){
         Line line = lineService.get(id)
                 .orElseThrow(() -> new WebApplicationException(Response.Status.NOT_FOUND));
