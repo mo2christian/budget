@@ -3,7 +3,6 @@ package com.mo2christian.budget.filter;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.annotation.Priority;
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
