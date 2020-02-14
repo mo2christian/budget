@@ -20,7 +20,7 @@ public class ApiKeyFilter implements ContainerRequestFilter {
 
     @Inject
     @ConfigProperty(name = "app.key")
-    private String appKey;
+    String appKey;
 
     @Override
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {
