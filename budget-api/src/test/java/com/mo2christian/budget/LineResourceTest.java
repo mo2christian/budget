@@ -47,7 +47,7 @@ public class LineResourceTest {
         given()
                 .when().get("/line")
                 .then()
-                .statusCode(is(200));
+                .statusCode(is(403));
     }
 
 }
