@@ -1,4 +1,4 @@
-package com.mo2christian.budget.filter;
+package com.mo2christian.common.filter;
 
 import javax.ws.rs.NameBinding;
 import java.lang.annotation.ElementType;

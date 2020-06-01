@@ -1,5 +1,8 @@
 package com.mo2christian.budget;
 
+import com.mo2christian.line.LineDto;
+import com.mo2christian.line.LineType;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;

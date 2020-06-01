@@ -1,4 +1,4 @@
-package com.mo2christian.budget.converter;
+package com.mo2christian.common.converter;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

@@ -1,4 +1,4 @@
-package com.mo2christian.budget.filter;
+package com.mo2christian.common.filter;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 

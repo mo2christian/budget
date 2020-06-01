@@ -1,4 +1,4 @@
-package com.mo2christian.budget;
+package com.mo2christian.line;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;

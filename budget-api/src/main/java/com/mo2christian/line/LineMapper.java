@@ -1,6 +1,6 @@
-package com.mo2christian.budget;
+package com.mo2christian.line;
 
-import com.mo2christian.budget.converter.DateParamConverter;
+import com.mo2christian.common.converter.DateParamConverter;
 
 public class LineMapper {
 

@@ -1,4 +1,4 @@
-package com.mo2christian.budget;
+package com.mo2christian.line;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;

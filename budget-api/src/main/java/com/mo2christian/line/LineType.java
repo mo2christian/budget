@@ -1,4 +1,4 @@
-package com.mo2christian.budget;
+package com.mo2christian.line;
 
 import javax.persistence.Embeddable;
 import java.io.Serializable;
