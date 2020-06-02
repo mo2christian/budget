@@ -1,5 +1,6 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
+  dir: budget-api
   args:
     - build
     - -f
@@ -8,11 +9,12 @@ steps:
     - gcr.io/${PROJECT_ID}/budget-api:${_VERSION}
     - .
 - name: 'gcr.io/cloud-builders/docker'
+  dir: budget-api
   args:
     - push
     - gcr.io/${PROJECT_ID}/budget-api:${_VERSION}
 timeout: 600s
 substitutions:
-  _VERSION: '0.1.4'
+  _VERSION: '0.1.7'
 options:
   machineType: 'N1_HIGHCPU_32'

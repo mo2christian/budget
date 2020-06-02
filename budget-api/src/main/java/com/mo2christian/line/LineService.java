@@ -4,6 +4,8 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.validation.Valid;
+import javax.ws.rs.ext.ParamConverter;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
@@ -15,9 +17,12 @@ public class LineService {
 
     private EntityManager em;
 
+    private ParamConverter<Date> dateParamConverter;
+
     @Inject
-    public LineService(EntityManager em) {
+    public LineService(EntityManager em, ParamConverter<Date> dateParamConverter) {
         this.em = em;
+        this.dateParamConverter = dateParamConverter;
     }
 
     public void add(@Valid Line line){
@@ -32,6 +37,31 @@ public class LineService {
             cal.setTime(line.getEndPeriod());
             cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
             line.setEndPeriod(cal.getTime());
+        }
+        em.persist(line);
+    }
+
+    public void update(Field field){
+        Line line = get(field.getPk())
+                .orElseThrow(IllegalArgumentException::new);
+        switch (field.getName()){
+            case LABEL:
+                line.setLabel(field.getValue());
+                break;
+            case AMOUNT:
+                line.setAmount(BigDecimal.valueOf(Double.valueOf(field.getValue())));
+                break;
+            case TYPE:
+                line.setType(LineType.valueOf(field.getValue()));
+                break;
+            case FREQUENCY:
+                line.setFrequency(Integer.valueOf(field.getValue()));
+                break;
+            case BEGIN_DATE:
+                line.setBeginPeriod(dateParamConverter.fromString(field.getValue()));
+                break;
+            case END_DATE:
+                line.setEndPeriod(dateParamConverter.fromString(field.getValue()));
         }
         em.persist(line);
     }

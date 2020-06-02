@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Line info</title>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.26.0/moment.min.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            $('#label').editable({
+                type: 'text',
+                url: '/line/update',
+                title: 'Enter label'
+            });
+
+            $('#amount').editable({
+                type: 'text',
+                url: '/line/update',
+                title: 'Enter amount'
+            });
+
+            $('#type').editable({
+                type: 'select',
+                url: '/line/update',
+                title: 'Enter type',
+                source: [
+                  {'value': 'd', 'text': 'Debit'},
+                  {'value': 'c', 'text': 'Credit'}
+               ]
+            });
+
+            $('#frequency').editable({
+                type: 'text',
+                url: '/line/update',
+                title: 'Enter frequency'
+            });
+
+            $('#begin_date').editable({
+                type: 'combodate',
+                url: '/line/update',
+                title: 'Select date',
+                format: 'YYYY-MM-DD',
+                viewformat: 'YYYY-MM-DD',
+                template: 'MMMM / YYYY',
+                combodate: {
+                    minYear: 2015,
+                    maxYear: 2030,
+                    minuteStep: 1
+                }
+            });
+
+            $('#end_date').editable({
+                type: 'combodate',
+                url: '/line/update',
+                title: 'Select date',
+                format: 'YYYY-MM-DD',
+                viewformat: 'YYYY-MM-DD',
+                template: 'MMMM / YYYY',
+                combodate: {
+                    minYear: 2015,
+                    maxYear: 2030,
+                    minuteStep: 1
+                }
+            });
+
+        });
+    </script>
+</head>
+<body>
+    <nav class="navbar navbar-light bg-light">
+        <a href="/">Budget</a>
+        <a href="/line">Line</a>
+    </nav>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Line detail</h3>
+        </div>
+        <div class="panel-body">
+            <div>
+                <label class="col-3">Label</label>
+                <a class="col-9" href="#" id="label" data-pk="{line.id}">{line.label}</a>
+            </div>
+            <div>
+                <label class="col-3">Amount</label>
+                <a class="col-9" href="#" id="amount" data-pk="{line.id}">{line.amount}</a>
+            </div>
+            <div>
+                <label class="col-3">Type</label>
+                <a class="col-9" href="#" id="type" data-pk="{line.id}">{line.type}</a>
+            </div>
+            <div>
+                <label class="col-3">Frequency</label>
+                <a class="col-9" href="#" id="frequency" data-pk="{line.id}">{line.frequency}</a>
+            </div>
+            <div>
+                <label class="col-3">Begin date</label>
+                <a class="col-9" href="#" id="begin_date" data-pk="{line.id}">{line.beginPeriod.value}</a>
+            </div>
+            <div>
+                <label class="col-3">End date</label>
+                <a class="col-9" href="#" id="end_date" data-pk="{line.id}">
+                    {#if line.endPeriod ne null}
+                        {line.endPeriod.value}
+                    {/if}
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

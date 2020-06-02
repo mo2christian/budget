@@ -4,6 +4,7 @@ import com.mo2christian.common.converter.DateParamConverter;
 import com.mo2christian.common.filter.ApiKey;
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
+import io.quarkus.qute.api.ResourcePath;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -24,6 +25,10 @@ public class LineResource {
 
     @Inject
     Template line;
+
+    @Inject
+    @ResourcePath("line_info")
+    Template lineInfo;
 
     @Inject
     Validator validator;
@@ -56,6 +61,36 @@ public class LineResource {
         }
         lineService.delete(line.get());
         return build(Collections.EMPTY_LIST);
+    }
+
+    @Path("/detail/{id}")
+    @GET
+    @Transactional
+    @RolesAllowed("user")
+    public TemplateInstance detail(@PathParam("id") Long id){
+        Optional<LineDto> line = lineService
+                .get(id)
+                .map(mapper::toDto);
+        if (!line.isPresent()){
+            List<String> errors = Arrays.asList(String.format("Line %d not found", id));
+            return build(errors);
+        }
+        return lineInfo.data("line", line.get());
+    }
+
+    @POST
+    @Path("/update")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Response update(@Valid @BeanParam Field field){
+        try{
+            lineService.update(field);
+        }
+        catch(IllegalArgumentException ex){
+            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+        }
+        return Response.ok().build();
     }
 
     @POST

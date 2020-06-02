@@ -1,5 +1,7 @@
 package com.mo2christian.common.converter;
 
+import com.mo2christian.line.FieldName;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.ext.ParamConverter;
@@ -11,13 +13,16 @@ import java.util.Date;
 
 @Provider
 @ApplicationScoped
-public class DateParamConverterProvider implements ParamConverterProvider {
+public class ConverterProvider implements ParamConverterProvider {
 
     private ParamConverter<Date> dateParamConverter;
 
+    private ParamConverter<FieldName> fieldNameParamConverter;
+
     @Inject
-    public DateParamConverterProvider(DateParamConverter dateParamConverter) {
+    public ConverterProvider(DateParamConverter dateParamConverter, FieldNameConverter fieldNameParamConverter) {
         this.dateParamConverter = dateParamConverter;
+        this.fieldNameParamConverter = fieldNameParamConverter;
     }
 
     @SuppressWarnings("unchecked")
@@ -25,6 +30,9 @@ public class DateParamConverterProvider implements ParamConverterProvider {
     public <T> ParamConverter<T> getConverter(Class<T> rawType, Type genericType, Annotation[] annotations) {
         if (rawType.isAssignableFrom(Date.class)) {
             return (ParamConverter<T>) dateParamConverter;
+        }
+        if (rawType.isAssignableFrom(FieldName.class)) {
+            return (ParamConverter<T>) fieldNameParamConverter;
         }
         return null;
     }
