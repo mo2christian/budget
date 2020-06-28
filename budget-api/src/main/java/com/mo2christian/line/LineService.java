@@ -27,17 +27,10 @@ public class LineService {
 
     public void add(@Valid Line line){
         //mettre la date de début au 01
-        Calendar cal = new GregorianCalendar();
-        cal.setTime(line.getBeginPeriod());
-        cal.set(Calendar.DAY_OF_MONTH, 1);
+        line.setBeginPeriod(startDate(line.getBeginPeriod()));
 
         //mettre la date de fin à la fin du mois
-        line.setBeginPeriod(cal.getTime());
-        if (line.getEndPeriod() != null){
-            cal.setTime(line.getEndPeriod());
-            cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-            line.setEndPeriod(cal.getTime());
-        }
+        line.setEndPeriod(endDate(line.getEndPeriod()));
         em.persist(line);
     }
 
@@ -58,10 +51,10 @@ public class LineService {
                 line.setFrequency(Integer.valueOf(field.getValue()));
                 break;
             case BEGIN_DATE:
-                line.setBeginPeriod(dateParamConverter.fromString(field.getValue()));
+                line.setBeginPeriod(startDate(dateParamConverter.fromString(field.getValue())));
                 break;
             case END_DATE:
-                line.setEndPeriod(dateParamConverter.fromString(field.getValue()));
+                line.setEndPeriod(endDate(dateParamConverter.fromString(field.getValue())));
         }
         em.persist(line);
     }
@@ -102,5 +95,19 @@ public class LineService {
         return date.toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
+    }
+
+    private Date startDate(Date date){
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(date);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        return cal.getTime();
+    }
+
+    private Date endDate(Date date){
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(date);
+        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        return cal.getTime();
     }
 }
