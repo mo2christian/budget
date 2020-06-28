@@ -30,7 +30,9 @@ public class LineService {
         line.setBeginPeriod(startDate(line.getBeginPeriod()));
 
         //mettre la date de fin à la fin du mois
-        line.setEndPeriod(endDate(line.getEndPeriod()));
+        if (line.getEndPeriod() != null)
+            line.setEndPeriod(endDate(line.getEndPeriod()));
+
         em.persist(line);
     }
 
