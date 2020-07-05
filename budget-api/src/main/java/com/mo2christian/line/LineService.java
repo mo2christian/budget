@@ -2,7 +2,6 @@ package com.mo2christian.line;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
 import javax.validation.Valid;
 import javax.ws.rs.ext.ParamConverter;
 import java.math.BigDecimal;
@@ -15,13 +14,13 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class LineService {
 
-    private EntityManager em;
-
     private ParamConverter<Date> dateParamConverter;
 
+    private LineRepository repository;
+
     @Inject
-    public LineService(EntityManager em, ParamConverter<Date> dateParamConverter) {
-        this.em = em;
+    public LineService(LineRepository repository, ParamConverter<Date> dateParamConverter) {
+        this.repository = repository;
         this.dateParamConverter = dateParamConverter;
     }
 
@@ -33,7 +32,8 @@ public class LineService {
         if (line.getEndPeriod() != null)
             line.setEndPeriod(endDate(line.getEndPeriod()));
 
-        em.persist(line);
+        line.setId(repository.count() + 1);
+        repository.persist(line);
     }
 
     public void update(Field field){
@@ -47,7 +47,7 @@ public class LineService {
                 line.setAmount(BigDecimal.valueOf(Double.valueOf(field.getValue())));
                 break;
             case TYPE:
-                line.setType(LineType.valueOf(field.getValue()));
+                line.setType(LineType.toLineType(field.getValue()));
                 break;
             case FREQUENCY:
                 line.setFrequency(Integer.valueOf(field.getValue()));
@@ -58,26 +58,25 @@ public class LineService {
             case END_DATE:
                 line.setEndPeriod(endDate(dateParamConverter.fromString(field.getValue())));
         }
-        em.persist(line);
+        repository.update(line);
     }
 
     public void delete(@Valid Line line){
-        em.remove(line);
+        repository.delete(line);
     }
 
     public Optional<Line> get(long id){
-        Line line = em.find(Line.class, id);
+        Line line = repository.findById(id);
         return Optional.ofNullable(line);
     }
 
     public List<Line> getAll(){
-        return em.createNamedQuery(Line.FIND_ALL, Line.class)
-                .getResultList();
+        return repository.listAll();
     }
 
     public List<Line> get(Date date){
-        return em.createNamedQuery(Line.FIND_ALL, Line.class)
-                .getResultList()
+        return repository.findAll()
+                .list()
                 .stream()
                 .filter(l -> l.getBeginPeriod().before(date))
                 .filter(l -> l.getEndPeriod() == null || date.before(l.getEndPeriod()))

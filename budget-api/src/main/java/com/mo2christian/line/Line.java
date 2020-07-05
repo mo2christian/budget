@@ -1,6 +1,9 @@
 package com.mo2christian.line;
 
-import javax.persistence.*;
+import io.quarkus.mongodb.panache.MongoEntity;
+import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.codecs.pojo.annotations.BsonProperty;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -8,51 +11,39 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Objects;
 
-@Entity
-@NamedQueries({
-        @NamedQuery(name = Line.FIND_ALL, query = "SELECT l FROM Line l")
-})
-@Table(name = "line")
-@Cacheable
+@MongoEntity(collection = "line")
 public class Line {
 
-    public static final String FIND_ALL="Line.findAll";
-
+    @BsonId
     @NotNull
-    @Id
-    @Column(name = "id", nullable = false, unique = true)
-    @GeneratedValue(generator = "line_seq", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "line_seq", sequenceName = "line_seq", allocationSize = 1)
     private long id;
 
+    @BsonProperty("label")
     @NotBlank
-    @Column(name = "label", nullable = false)
     private String label;
 
+    @BsonProperty("amount")
     @NotNull
-    @Column(name = "amount", nullable = false)
     private BigDecimal amount;
 
+    @BsonProperty("type")
     @NotNull
-    @AttributeOverride(name = "value", column = @Column(name = "type", nullable = false))
-    @Embedded
     private LineType type;
 
+    @BsonProperty("frequency")
     @NotNull
     @Min(1)
-    @Column(name = "frequency", nullable = false)
     private int frequency = 1;
 
+    @BsonProperty("begin")
     @NotNull
-    @Column(name = "begin_period", nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date beginPeriod = new Date();
+    private Date beginPeriod;
 
-    @Column(name = "end_period")
-    @Temporal(TemporalType.DATE)
+    @BsonProperty("end")
     private Date endPeriod;
 
     public Line() {
+        beginPeriod = new Date();
     }
 
     public long getId() {
@@ -109,13 +100,6 @@ public class Line {
 
     public void setEndPeriod(Date endPeriod) {
         this.endPeriod = endPeriod;
-    }
-
-    @PrePersist
-    @PreUpdate
-    private void validate(){
-        if (endPeriod != null && beginPeriod.after(endPeriod))
-            throw new IllegalStateException();
     }
 
     @Override

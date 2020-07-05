@@ -6,7 +6,6 @@ import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
 import io.quarkus.qute.api.ResourcePath;
 
-import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -44,7 +43,6 @@ public class LineResource {
     }
 
     @GET
-    @RolesAllowed("user")
     public TemplateInstance getAll(){
         return build(Collections.EMPTY_LIST);
     }
@@ -52,7 +50,6 @@ public class LineResource {
     @Path("/delete/{id}")
     @GET
     @Transactional
-    @RolesAllowed("user")
     public TemplateInstance delete(@PathParam("id") Long id){
         Optional<Line> line = lineService.get(id);
         if (!line.isPresent()){
@@ -66,7 +63,6 @@ public class LineResource {
     @Path("/detail/{id}")
     @GET
     @Transactional
-    @RolesAllowed("user")
     public TemplateInstance detail(@PathParam("id") Long id){
         Optional<LineDto> line = lineService
                 .get(id)
@@ -88,7 +84,7 @@ public class LineResource {
             lineService.update(field);
         }
         catch(IllegalArgumentException ex){
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            throw new WebApplicationException(ex, Response.Status.BAD_REQUEST);
         }
         return Response.ok().build();
     }
@@ -97,7 +93,6 @@ public class LineResource {
     @Path("/add")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Transactional
-    @RolesAllowed("user")
     public TemplateInstance save(@BeanParam LineDto dto){
         List<String> errors = validate(dto);
         if (errors.isEmpty())
@@ -108,6 +103,7 @@ public class LineResource {
     @POST
     @Transactional
     @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @ApiKey
     public Response add(@Valid LineDto lineDto){
         Line line = mapper.toLine(lineDto);
@@ -118,6 +114,7 @@ public class LineResource {
     @PUT
     @Transactional
     @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @ApiKey
     public Response update(@Valid LineDto dto){
         Line line = lineService.get(dto.getId())

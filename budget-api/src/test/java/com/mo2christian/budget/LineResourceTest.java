@@ -1,28 +1,32 @@
 package com.mo2christian.budget;
 
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.h2.H2DatabaseTestResource;
+import com.mo2christian.line.LineRepository;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectMock;
+import io.quarkus.test.junit.mockito.InjectSpy;
 import io.restassured.http.ContentType;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.mockito.Mockito;
 
 import javax.inject.Inject;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 
-@QuarkusTestResource(H2DatabaseTestResource.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @QuarkusTest
 public class LineResourceTest {
 
     @Inject
     @ConfigProperty(name = "app.key")
-    private String apiKey;
+    String apiKey;
+
+    @InjectMock
+    LineRepository lineRepository;
 
     @Test
     @Order(1)
@@ -30,7 +34,7 @@ public class LineResourceTest {
         String json = "{\n" +
                 "\t\"label\": \"Actions\",\n" +
                 "\t\"amount\": 180,\n" +
-                "\t\"type\": \"d\"\n" +
+                "\t\"type\": \"DEBIT\"\n" +
                 "}";
         given()
                 .contentType(ContentType.JSON)
@@ -47,7 +51,7 @@ public class LineResourceTest {
         given()
                 .when().get("/line")
                 .then()
-                .statusCode(is(403));
+                .statusCode(is(200));
     }
 
 }

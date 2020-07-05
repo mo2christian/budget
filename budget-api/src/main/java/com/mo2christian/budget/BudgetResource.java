@@ -6,7 +6,6 @@ import com.mo2christian.line.LineService;
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
 
-import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -32,14 +31,12 @@ public class BudgetResource {
     }
 
     @GET
-    @RolesAllowed("user")
     @Path("/{period}")
     public TemplateInstance index(@PathParam("period") Date date){
         return build(date);
     }
 
     @GET
-    @RolesAllowed("user")
     public TemplateInstance index(){
         return build(new Date());
     }
