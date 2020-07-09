@@ -14,7 +14,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-@Path("/")
+@Path("/budget")
 public class BudgetResource {
 
     private LineService lineService;
