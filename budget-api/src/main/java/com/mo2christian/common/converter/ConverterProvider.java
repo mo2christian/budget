@@ -1,5 +1,6 @@
 package com.mo2christian.common.converter;
 
+import com.mo2christian.line.FieldConverter;
 import com.mo2christian.line.FieldName;
 import com.mo2christian.line.LineType;
 
@@ -18,13 +19,13 @@ public class ConverterProvider implements ParamConverterProvider {
 
     private ParamConverter<Date> dateParamConverter;
 
-    private ParamConverter<FieldName> fieldNameParamConverter;
+    private ParamConverter<FieldConverter> fieldNameParamConverter;
 
     private ParamConverter<LineType> lineTypeParamConverter;
 
     @Inject
-    public ConverterProvider(DateParamConverter dateParamConverter,
-                             FieldNameConverter fieldNameParamConverter,
+    public ConverterProvider(ParamConverter<Date> dateParamConverter,
+                             ParamConverter<FieldConverter> fieldNameParamConverter,
                              ParamConverter<LineType> lineTypeParamConverter) {
         this.dateParamConverter = dateParamConverter;
         this.fieldNameParamConverter = fieldNameParamConverter;
@@ -37,7 +38,7 @@ public class ConverterProvider implements ParamConverterProvider {
         if (rawType.isAssignableFrom(Date.class)) {
             return (ParamConverter<T>) dateParamConverter;
         }
-        if (rawType.isAssignableFrom(FieldName.class)) {
+        if (rawType.isAssignableFrom(FieldConverter.class)) {
             return (ParamConverter<T>) fieldNameParamConverter;
         }
         if (rawType.isAssignableFrom(LineType.class)) {

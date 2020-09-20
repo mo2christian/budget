@@ -42,6 +42,12 @@
                 title: 'Enter frequency'
             });
 
+            $('#withdrawal_day').editable({
+                type: 'text',
+                url: '/line/update',
+                title: 'Enter withdrawal day'
+            });
+
             $('#begin_date').editable({
                 type: 'combodate',
                 url: '/line/update',
@@ -98,6 +104,10 @@
             <div>
                 <label class="col-3">Frequency</label>
                 <a class="col-9" href="#" id="frequency" data-pk="{line.id}">{line.frequency}</a>
+            </div>
+            <div>
+                <label class="col-3">WithdrawalDay</label>
+                <a class="col-9" href="#" id="withdrawal_day" data-pk="{line.id}">{line.withdrawalDay}</a>
             </div>
             <div>
                 <label class="col-3">Begin date</label>

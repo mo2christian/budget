@@ -1,5 +1,6 @@
 package com.mo2christian.line;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -37,6 +38,11 @@ public class LineDto implements Serializable {
 
     @FormParam("endPeriod")
     private Date endPeriod;
+
+    @Min(1)
+    @Max(30)
+    @FormParam("withdrawalDay")
+    private int withdrawalDay;
 
     public LineDto() {
     }
@@ -103,6 +109,14 @@ public class LineDto implements Serializable {
 
     public void setEndPeriod(Date endPeriod) {
         this.endPeriod = endPeriod;
+    }
+
+    public int getWithdrawalDay() {
+        return withdrawalDay;
+    }
+
+    public void setWithdrawalDay(int withdrawalDay) {
+        this.withdrawalDay = withdrawalDay;
     }
 
     @Override

@@ -3,8 +3,6 @@ package com.mo2christian.line;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.validation.Valid;
-import javax.ws.rs.ext.ParamConverter;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
@@ -14,14 +12,11 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class LineService {
 
-    private ParamConverter<Date> dateParamConverter;
-
     private LineRepository repository;
 
     @Inject
-    public LineService(LineRepository repository, ParamConverter<Date> dateParamConverter) {
+    public LineService(LineRepository repository) {
         this.repository = repository;
-        this.dateParamConverter = dateParamConverter;
     }
 
     public void add(@Valid Line line){
@@ -36,28 +31,10 @@ public class LineService {
         repository.persist(line);
     }
 
-    public void update(Field field){
+    public void update(@Valid Field field){
         Line line = get(field.getPk())
                 .orElseThrow(IllegalArgumentException::new);
-        switch (field.getName()){
-            case LABEL:
-                line.setLabel(field.getValue());
-                break;
-            case AMOUNT:
-                line.setAmount(BigDecimal.valueOf(Double.valueOf(field.getValue())));
-                break;
-            case TYPE:
-                line.setType(LineType.toLineType(field.getValue()));
-                break;
-            case FREQUENCY:
-                line.setFrequency(Integer.valueOf(field.getValue()));
-                break;
-            case BEGIN_DATE:
-                line.setBeginPeriod(startDate(dateParamConverter.fromString(field.getValue())));
-                break;
-            case END_DATE:
-                line.setEndPeriod(endDate(dateParamConverter.fromString(field.getValue())));
-        }
+        field.getName().set(line, field.getValue());
         repository.update(line);
     }
 
@@ -111,4 +88,5 @@ public class LineService {
         cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
         return cal.getTime();
     }
+
 }

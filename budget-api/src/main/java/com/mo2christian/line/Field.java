@@ -6,9 +6,8 @@ import java.util.Objects;
 
 public class Field {
 
-    @NotNull
     @FormParam("name")
-    private FieldName name;
+    private @NotNull FieldConverter name;
 
     @NotNull()
     @FormParam("pk")
@@ -21,11 +20,11 @@ public class Field {
     public Field() {
     }
 
-    public FieldName getName() {
+    public @NotNull FieldConverter getName() {
         return name;
     }
 
-    public void setName(FieldName name) {
+    public void setName(@NotNull FieldConverter name) {
         this.name = name;
     }
 

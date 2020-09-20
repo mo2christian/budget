@@ -4,7 +4,13 @@ import java.util.stream.Stream;
 
 public enum FieldName {
 
-    LABEL("label"), AMOUNT("amount"), TYPE("type"), FREQUENCY("frequency"), BEGIN_DATE("begin_date"), END_DATE("end_date");
+    LABEL("label"),
+    AMOUNT("amount"),
+    TYPE("type"),
+    FREQUENCY("frequency"),
+    BEGIN_DATE("begin_date"),
+    END_DATE("end_date"),
+    WITHDRAWAL_DAY("withdrawal_day");
 
     private String name;
 

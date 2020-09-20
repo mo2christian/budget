@@ -18,6 +18,7 @@ public class LineMapper {
         line.setFrequency(dto.getFrequency());
         line.setBeginPeriod(dto.getBeginPeriod());
         line.setEndPeriod(dto.getEndPeriod());
+        line.setWithdrawalDay(dto.getWithdrawalDay());
         return line;
     }
 
@@ -30,6 +31,7 @@ public class LineMapper {
         dto.setFrequency(line.getFrequency());
         dto.setBeginPeriod(line.getBeginPeriod());
         dto.setEndPeriod(line.getEndPeriod());
+        dto.setWithdrawalDay(line.getWithdrawalDay());
         return dto;
     }
 

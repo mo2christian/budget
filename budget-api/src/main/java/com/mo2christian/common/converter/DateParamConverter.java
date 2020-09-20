@@ -45,4 +45,15 @@ public class DateParamConverter implements ParamConverter<Date> {
             return "";
         return new SimpleDateFormat(DATE_VALUE_PATTERN).format(date);
     }
+
+    public static Date toDate(String value){
+        try{
+            if (value == null)
+                throw new IllegalArgumentException("Invalid date");
+            return new SimpleDateFormat(DATE_VALUE_PATTERN).parse(value.trim());
+        }
+        catch(ParseException ex){
+            throw new RuntimeException(ex);
+        }
+    }
 }

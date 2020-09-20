@@ -86,6 +86,9 @@ public class LineResource {
         catch(IllegalArgumentException ex){
             throw new WebApplicationException(ex, Response.Status.BAD_REQUEST);
         }
+        catch (Exception ex){
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+        }
         return Response.ok().build();
     }
 
