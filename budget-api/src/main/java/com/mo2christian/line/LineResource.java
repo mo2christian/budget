@@ -37,9 +37,9 @@ public class LineResource {
     private final LineMapper mapper;
 
     @Inject
-    public LineResource(LineService lineService, DateParamConverter converter) {
+    public LineResource(LineService lineService) {
         this.lineService = lineService;
-        mapper = new LineMapper(converter);
+        mapper = new LineMapper();
     }
 
     @GET
@@ -53,7 +53,7 @@ public class LineResource {
     public TemplateInstance delete(@PathParam("id") Long id){
         Optional<Line> line = lineService.get(id);
         if (!line.isPresent()){
-            List<String> errors = Arrays.asList(String.format("Line %d not found", id));
+            List<String> errors = Collections.singletonList(String.format("Line %d not found", id));
             return build(errors);
         }
         lineService.delete(line.get());
@@ -68,7 +68,7 @@ public class LineResource {
                 .get(id)
                 .map(mapper::toDto);
         if (!line.isPresent()){
-            List<String> errors = Arrays.asList(String.format("Line %d not found", id));
+            List<String> errors = Collections.singletonList(String.format("Line %d not found", id));
             return build(errors);
         }
         return lineInfo.data("line", line.get());
@@ -101,57 +101,6 @@ public class LineResource {
         if (errors.isEmpty())
             lineService.add(mapper.toLine(dto));
         return build(errors);
-    }
-
-    @POST
-    @Transactional
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    @ApiKey
-    public Response add(@Valid LineDto lineDto){
-        Line line = mapper.toLine(lineDto);
-        lineService.add(line);
-        return Response.ok().build();
-    }
-
-    @PUT
-    @Transactional
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    @ApiKey
-    public Response update(@Valid LineDto dto){
-        Line line = lineService.get(dto.getId())
-                .orElseThrow(() -> new WebApplicationException(Response.Status.NOT_FOUND));
-        line.setType(dto.getType());
-        line.setLabel(dto.getLabel());
-        line.setAmount(dto.getAmount());
-        lineService.add(line);
-        return Response.ok().build();
-    }
-
-    @Path("{id}")
-    @DELETE()
-    @Transactional
-    @Produces(MediaType.APPLICATION_JSON)
-    @ApiKey
-    public Response delete(@PathParam("id") long id){
-        Line line = lineService.get(id)
-                .orElseThrow(() -> new WebApplicationException(Response.Status.NOT_FOUND));
-        lineService.delete(line);
-        return Response.ok().build();
-    }
-
-    @Path("{id}")
-    @GET
-    @Transactional
-    @Produces(MediaType.APPLICATION_JSON)
-    @ApiKey
-    public Response get(@PathParam("id") long id){
-        Line line = lineService.get(id)
-                .orElseThrow(() -> new WebApplicationException(Response.Status.NOT_FOUND));
-        return Response.ok()
-                .entity(line)
-                .build();
     }
 
     private TemplateInstance build(List<String> errors){

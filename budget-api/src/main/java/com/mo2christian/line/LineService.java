@@ -1,5 +1,7 @@
 package com.mo2christian.line;
 
+import com.mo2christian.common.Utils;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -21,11 +23,11 @@ public class LineService {
 
     public void add(@Valid Line line){
         //mettre la date de début au 01
-        line.setBeginPeriod(startDate(line.getBeginPeriod()));
+        line.setBeginPeriod(Utils.startDate(line.getBeginPeriod()));
 
         //mettre la date de fin à la fin du mois
         if (line.getEndPeriod() != null)
-            line.setEndPeriod(endDate(line.getEndPeriod()));
+            line.setEndPeriod(Utils.endDate(line.getEndPeriod()));
 
         line.setId(repository.count() + 1);
         repository.persist(line);
@@ -51,9 +53,8 @@ public class LineService {
         return repository.listAll();
     }
 
-    public List<Line> get(Date date){
-        return repository.findAll()
-                .list()
+    public List<Line> get(final Date date){
+        return repository.listAll()
                 .stream()
                 .filter(l -> l.getBeginPeriod().before(date))
                 .filter(l -> l.getEndPeriod() == null || date.before(l.getEndPeriod()))
@@ -73,20 +74,6 @@ public class LineService {
         return date.toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
-    }
-
-    private Date startDate(Date date){
-        Calendar cal = new GregorianCalendar();
-        cal.setTime(date);
-        cal.set(Calendar.DAY_OF_MONTH, 1);
-        return cal.getTime();
-    }
-
-    private Date endDate(Date date){
-        Calendar cal = new GregorianCalendar();
-        cal.setTime(date);
-        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-        return cal.getTime();
     }
 
 }

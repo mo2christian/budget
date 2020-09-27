@@ -1,16 +1,20 @@
 package com.mo2christian.budget;
 
+import com.mo2christian.line.Line;
 import com.mo2christian.line.LineRepository;
+import com.mo2christian.line.LineType;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
-import io.restassured.http.ContentType;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import javax.inject.Inject;
+import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.Date;
+
+import static org.mockito.Mockito.*;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
@@ -19,35 +23,35 @@ import static org.hamcrest.Matchers.is;
 @QuarkusTest
 public class LineResourceTest {
 
-    @Inject
-    @ConfigProperty(name = "app.key")
-    String apiKey;
-
     @InjectMock
     LineRepository lineRepository;
 
+    private void before(){
+        Line line = new Line();
+        line.setAmount(BigDecimal.TEN);
+        line.setLabel("Line");
+        line.setWithdrawalDay(20);
+        line.setBeginPeriod(new Date());
+        line.setFrequency(1);
+        line.setId(1L);
+        line.setType(LineType.CREDIT);
+        when(lineRepository.listAll()).thenReturn(Collections.singletonList(line));
+    }
+
     @Test
     @Order(1)
-    public void add(){
-        String json = "{\n" +
-                "\t\"label\": \"Actions\",\n" +
-                "\t\"amount\": 180,\n" +
-                "\t\"type\": \"DEBIT\"\n" +
-                "}";
+    public void testLine(){
         given()
-                .contentType(ContentType.JSON)
-                .header("api-key", apiKey)
-                .body(json)
-                .post("/line")
+                .when().get("/line")
                 .then()
                 .statusCode(is(200));
     }
 
     @Test
     @Order(2)
-    public void testGetAll(){
+    public void testBudget(){
         given()
-                .when().get("/line")
+                .when().get("/budget")
                 .then()
                 .statusCode(is(200));
     }

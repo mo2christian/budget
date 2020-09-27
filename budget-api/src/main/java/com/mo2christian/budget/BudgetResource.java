@@ -17,17 +17,14 @@ import java.util.GregorianCalendar;
 @Path("/budget")
 public class BudgetResource {
 
-    private LineService lineService;
-
-    private DateParamConverter dateParamConverter;
+    private final LineService lineService;
 
     @Inject
     Template budget;
 
     @Inject
-    public BudgetResource(LineService lineService, DateParamConverter dateParamConverter) {
+    public BudgetResource(LineService lineService) {
         this.lineService = lineService;
-        this.dateParamConverter = dateParamConverter;
     }
 
     @GET
@@ -49,16 +46,17 @@ public class BudgetResource {
         previous.setTime(date);
         previous.add(Calendar.MONTH, -1);
         BudgetDto budgetDto = new BudgetDto();
-        LineMapper mapper = new LineMapper(dateParamConverter);
+        LineMapper mapper = new LineMapper();
         lineService.get(date)
                 .stream()
                 .map(mapper::toDto)
-                .forEach(dto -> budgetDto.add(dto));
+                .forEach(budgetDto::add);
         return budget.data("balance", budgetDto.getBalance())
                 .data("lines", budgetDto.getLines())
                 .data("previous", previous.getTime())
                 .data("next", next.getTime())
-                .data("now", date);
+                .data("now", date)
+                .data("actualBalance", budgetDto.getActualBalance());
     }
 
 }

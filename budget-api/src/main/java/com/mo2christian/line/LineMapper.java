@@ -4,10 +4,7 @@ import com.mo2christian.common.converter.DateParamConverter;
 
 public class LineMapper {
 
-    private final DateParamConverter converter;
-
-    public LineMapper(DateParamConverter converter){
-        this.converter = converter;
+    public LineMapper(){
     }
 
     public Line toLine(LineDto dto){
