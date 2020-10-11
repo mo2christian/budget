@@ -44,6 +44,8 @@ public class LineDto implements Serializable {
     @FormParam("withdrawalDay")
     private int withdrawalDay;
 
+    private boolean achieved = false;
+
     public LineDto() {
     }
 
@@ -117,6 +119,14 @@ public class LineDto implements Serializable {
 
     public void setWithdrawalDay(int withdrawalDay) {
         this.withdrawalDay = withdrawalDay;
+    }
+
+    public boolean isAchieved() {
+        return achieved;
+    }
+
+    public void setAchieved(boolean achieved) {
+        this.achieved = achieved;
     }
 
     @Override

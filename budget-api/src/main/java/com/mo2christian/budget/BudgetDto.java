@@ -37,21 +37,39 @@ public class BudgetDto implements Serializable {
         lines.add(dto);
         if (LineType.CREDIT.equals(dto.getType())) {
             balance = balance.add(dto.getAmount());
-            if (isAchived(dto))
+            if (isAchieved(dto)) {
+                dto.setAchieved(true);
                 actualBalance = actualBalance.add(dto.getAmount());
+            }
         }
         else {
             balance = balance.subtract(dto.getAmount());
-            if (isAchived(dto))
+            if (isAchieved(dto)) {
+                dto.setAchieved(true);
                 actualBalance = actualBalance.subtract(dto.getAmount());
+            }
         }
     }
 
-    private boolean isAchived(LineDto line){
+    private boolean isAchieved(LineDto line){
         Calendar now = new GregorianCalendar();
         now.setTime(new Date());
         int dayOfMount = now.get(Calendar.DAY_OF_MONTH);
-        return line.getWithdrawalDay() <= dayOfMount;
+        return prelevDate(line) <= dayOfMount;
+    }
+
+    private int prelevDate(LineDto line){
+        Calendar prelevDate = new GregorianCalendar();
+        prelevDate.setTime(new Date());
+        prelevDate.set(Calendar.DAY_OF_MONTH, line.getWithdrawalDay());
+        int day = prelevDate.get(Calendar.DAY_OF_WEEK);
+        if (day == Calendar.SATURDAY){
+            return line.getWithdrawalDay() + 2;
+        }
+        if (day == Calendar.SUNDAY){
+            return line.getWithdrawalDay() + 1;
+        }
+        return line.getWithdrawalDay();
     }
 
 }

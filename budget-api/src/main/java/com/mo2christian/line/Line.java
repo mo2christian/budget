@@ -1,9 +1,5 @@
 package com.mo2christian.line;
 
-import io.quarkus.mongodb.panache.MongoEntity;
-import org.bson.codecs.pojo.annotations.BsonId;
-import org.bson.codecs.pojo.annotations.BsonProperty;
-
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -12,40 +8,31 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Objects;
 
-@MongoEntity(collection = "line")
 public class Line {
 
-    @BsonId
     @NotNull
     private long id;
 
-    @BsonProperty("label")
     @NotBlank
     private String label;
 
-    @BsonProperty("amount")
     @NotNull
     private BigDecimal amount;
 
-    @BsonProperty("type")
     @NotNull
     private LineType type;
 
-    @BsonProperty("frequency")
     @NotNull
     @Min(1)
     private int frequency = 1;
 
-    @BsonProperty("begin")
     @NotNull
     private Date beginPeriod;
 
-    @BsonProperty("end")
     private Date endPeriod;
 
     @Max(30)
     @Min(1)
-    @BsonProperty("withdrawalDay")
     private int withdrawalDay = 5;
 
     public Line() {

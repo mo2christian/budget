@@ -1,20 +1,38 @@
 steps:
+- name: 'gcr.io/cloud-builders/mvn'
+  dir: budget-api
+  id: Package solution
+  args:
+    - package
 - name: 'gcr.io/cloud-builders/docker'
   dir: budget-api
+  id: Create container
   args:
     - build
     - -f
-    - src/main/docker/Dockerfile.multistage
+    - src/main/docker/Dockerfile.jvm
     - -t
     - gcr.io/${PROJECT_ID}/budget-api:${_VERSION}
     - .
 - name: 'gcr.io/cloud-builders/docker'
   dir: budget-api
+  id: Push image
   args:
     - push
     - gcr.io/${PROJECT_ID}/budget-api:${_VERSION}
+- name: 'gcr.io/cloud-builders/gcloud'
+  id: Deploy app
+  args:
+    - run
+    - deploy
+    - web
+    - --image=gcr.io/${PROJECT_ID}/budget-api:${_VERSION}
+    - --platform=managed
+    - --region=europe-west1
+    - --project=${PROJECT_ID}
+    - --service-account=budget@mybudget-monlabo-biz.iam.gserviceaccount.com
 timeout: 600s
 substitutions:
-  _VERSION: '0.2.2'
+  _VERSION: '0.2.3'
 options:
-  machineType: 'N1_HIGHCPU_32'
+  machineType: 'N1_HIGHCPU_8'

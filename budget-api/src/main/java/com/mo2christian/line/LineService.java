@@ -29,7 +29,6 @@ public class LineService {
         if (line.getEndPeriod() != null)
             line.setEndPeriod(Utils.endDate(line.getEndPeriod()));
 
-        line.setId(repository.count() + 1);
         repository.persist(line);
     }
 
@@ -45,8 +44,7 @@ public class LineService {
     }
 
     public Optional<Line> get(long id){
-        Line line = repository.findById(id);
-        return Optional.ofNullable(line);
+        return repository.findById(id);
     }
 
     public List<Line> getAll(){

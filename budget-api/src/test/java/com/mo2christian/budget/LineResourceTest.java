@@ -5,10 +5,7 @@ import com.mo2christian.line.LineRepository;
 import com.mo2christian.line.LineType;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -26,6 +23,7 @@ public class LineResourceTest {
     @InjectMock
     LineRepository lineRepository;
 
+    @BeforeEach
     private void before(){
         Line line = new Line();
         line.setAmount(BigDecimal.TEN);

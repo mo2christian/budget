@@ -7,7 +7,7 @@
 #
 # Then, build the image with:
 #
-# docker build -fieldConverter src/main/docker/Dockerfile.jvm -t quarkus/budget-api-jvm .
+# docker build -f src/main/docker/Dockerfile.jvm -t quarkus/budget-api-jvm .
 #
 # Then run the container using:
 #

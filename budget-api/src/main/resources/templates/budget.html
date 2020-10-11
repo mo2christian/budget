@@ -30,6 +30,7 @@
         <tr>
             <th scope="col" colspan="2">Debit</th>
             <th scope="col" colspan="2">Credit</th>
+            <th scope="col" colspan="1">Status</th>
         </tr>
     </thead>
     <tbody>
@@ -55,12 +56,17 @@
                     {line.amount}
                 {/if}
             </td>
+            <td>
+                {#if line.achieved}
+                <span style="color: green">Done</span>
+                {/if}
+            </td>
         </tr>
         {/for}
     </tbody>
     <tfoot>
         <tr>
-            <th scope="row" colspan="3">
+            <th scope="row" colspan="4">
                 Balance
             </th>
             <th>
@@ -68,7 +74,7 @@
             </th>
         </tr>
         <tr>
-            <th scope="row" colspan="3">
+            <th scope="row" colspan="4">
                 Actual Balance
             </th>
             <th>
