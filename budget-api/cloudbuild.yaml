@@ -31,8 +31,10 @@ steps:
     - --region=europe-west1
     - --project=${PROJECT_ID}
     - --service-account=budget@mybudget-monlabo-biz.iam.gserviceaccount.com
+    - --clear-cloudsql-instances
+    - --clear-env-vars
 timeout: 600s
 substitutions:
-  _VERSION: '0.2.3'
+  _VERSION: '0.2.4'
 options:
   machineType: 'N1_HIGHCPU_8'

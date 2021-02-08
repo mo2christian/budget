@@ -9,7 +9,7 @@ import java.util.*;
 
 public class BudgetDto implements Serializable {
 
-    private List<LineDto> lines;
+    private final List<LineDto> lines;
 
     private BigDecimal balance;
 
