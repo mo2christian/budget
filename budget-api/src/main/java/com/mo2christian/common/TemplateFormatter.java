@@ -5,6 +5,8 @@ import io.quarkus.qute.TemplateExtension;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 @TemplateExtension
@@ -17,16 +19,16 @@ public class TemplateFormatter {
         return lineType.label();
     }
 
-    public static String label(Date date){
+    public static String label(LocalDate date){
         if (date == null)
             return "";
-        return new SimpleDateFormat(DATE_LABEL_PATTERN).format(date);
+        return date.format(DateTimeFormatter.ofPattern(DATE_LABEL_PATTERN));
     }
 
-    public static String value(Date date){
+    public static String value(LocalDate date){
         if (date == null)
             return "";
-        return new SimpleDateFormat(DATE_VALUE_PATTERN).format(date);
+        return date.format(DateTimeFormatter.ofPattern(DATE_VALUE_PATTERN));
     }
 
     public static String label(Integer frequency){

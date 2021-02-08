@@ -11,20 +11,21 @@ import javax.ws.rs.ext.ParamConverterProvider;
 import javax.ws.rs.ext.Provider;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Provider
 @ApplicationScoped
 public class ConverterProvider implements ParamConverterProvider {
 
-    private ParamConverter<Date> dateParamConverter;
+    private final ParamConverter<LocalDate> dateParamConverter;
 
-    private ParamConverter<FieldConverter> fieldNameParamConverter;
+    private final ParamConverter<FieldConverter> fieldNameParamConverter;
 
-    private ParamConverter<LineType> lineTypeParamConverter;
+    private final ParamConverter<LineType> lineTypeParamConverter;
 
     @Inject
-    public ConverterProvider(ParamConverter<Date> dateParamConverter,
+    public ConverterProvider(ParamConverter<LocalDate> dateParamConverter,
                              ParamConverter<FieldConverter> fieldNameParamConverter,
                              ParamConverter<LineType> lineTypeParamConverter) {
         this.dateParamConverter = dateParamConverter;
@@ -35,7 +36,7 @@ public class ConverterProvider implements ParamConverterProvider {
     @SuppressWarnings("unchecked")
     @Override
     public <T> ParamConverter<T> getConverter(Class<T> rawType, Type genericType, Annotation[] annotations) {
-        if (rawType.isAssignableFrom(Date.class)) {
+        if (rawType.isAssignableFrom(LocalDate.class)) {
             return (ParamConverter<T>) dateParamConverter;
         }
         if (rawType.isAssignableFrom(FieldConverter.class)) {

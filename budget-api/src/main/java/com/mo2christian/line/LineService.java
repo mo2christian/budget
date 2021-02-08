@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class LineService {
 
-    private LineRepository repository;
+    private final LineRepository repository;
 
     @Inject
     public LineService(LineRepository repository) {
@@ -23,11 +23,15 @@ public class LineService {
 
     public void add(@Valid Line line){
         //mettre la date de début au 01
-        line.setBeginPeriod(Utils.startDate(line.getBeginPeriod()));
+        line.setBeginPeriod(line.getBeginPeriod().withDayOfMonth(1));
 
         //mettre la date de fin à la fin du mois
-        if (line.getEndPeriod() != null)
-            line.setEndPeriod(Utils.endDate(line.getEndPeriod()));
+        if (line.getEndPeriod() != null){
+            Calendar cal = new GregorianCalendar();
+            cal.setTime(Utils.toDate(line.getBeginPeriod()));
+            line.setEndPeriod(line.getEndPeriod()
+                    .withDayOfMonth(cal.getActualMaximum(Calendar.DAY_OF_MONTH)));
+        }
 
         repository.persist(line);
     }
@@ -51,27 +55,19 @@ public class LineService {
         return repository.listAll();
     }
 
-    public List<Line> get(final Date date){
+    public List<Line> get(final LocalDate date){
         return repository.listAll()
                 .stream()
-                .filter(l -> l.getBeginPeriod().before(date))
-                .filter(l -> l.getEndPeriod() == null || date.before(l.getEndPeriod()))
+                .filter(l -> l.getBeginPeriod().isBefore(date))
+                .filter(l -> l.getEndPeriod() == null || date.isBefore(l.getEndPeriod()))
                 .filter(l -> {
-                    LocalDate begin = toLocalDate(l.getBeginPeriod());
-                    LocalDate end = l.getEndPeriod() == null ? toLocalDate(date) : toLocalDate(l.getEndPeriod());
+                    LocalDate begin = l.getBeginPeriod();
+                    LocalDate end = l.getEndPeriod() == null ? date : l.getEndPeriod();
                     Period period = Period.between(begin, end);
                     long interval = period.getMonths() + 12 * period.getYears();
                     return interval % l.getFrequency() == 0;
                 })
                 .collect(Collectors.toList());
-    }
-
-    private LocalDate toLocalDate(Date date){
-        if (date instanceof java.sql.Date)
-            return ((java.sql.Date)date).toLocalDate();
-        return date.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
     }
 
 }

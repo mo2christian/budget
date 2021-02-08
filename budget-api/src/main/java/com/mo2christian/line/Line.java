@@ -5,6 +5,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 
@@ -27,16 +28,16 @@ public class Line {
     private int frequency = 1;
 
     @NotNull
-    private Date beginPeriod;
+    private LocalDate beginPeriod;
 
-    private Date endPeriod;
+    private LocalDate endPeriod;
 
     @Max(30)
     @Min(1)
     private int withdrawalDay = 5;
 
     public Line() {
-        beginPeriod = new Date();
+        beginPeriod = LocalDate.now();
     }
 
     public long getId() {
@@ -79,19 +80,19 @@ public class Line {
         this.frequency = frequency;
     }
 
-    public Date getBeginPeriod() {
+    public LocalDate getBeginPeriod() {
         return beginPeriod;
     }
 
-    public void setBeginPeriod(Date beginPeriod) {
+    public void setBeginPeriod(LocalDate beginPeriod) {
         this.beginPeriod = beginPeriod;
     }
 
-    public Date getEndPeriod() {
+    public LocalDate getEndPeriod() {
         return endPeriod;
     }
 
-    public void setEndPeriod(Date endPeriod) {
+    public void setEndPeriod(LocalDate endPeriod) {
         this.endPeriod = endPeriod;
     }
 

@@ -5,7 +5,7 @@ import java.util.function.Function;
 
 public class FieldConverter<T> {
 
-    private String name;
+    private final String name;
 
     private Function<String, T> transform;
 
@@ -13,7 +13,7 @@ public class FieldConverter<T> {
 
     public FieldConverter(String name){
         this.name = name;
-        transform = s -> (T) s;
+        transform = (String s) -> (T) s;
     }
 
     public String getName() {

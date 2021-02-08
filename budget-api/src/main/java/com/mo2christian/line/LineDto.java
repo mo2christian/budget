@@ -1,3 +1,4 @@
+
 package com.mo2christian.line;
 
 import javax.validation.constraints.Max;
@@ -7,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.FormParam;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 
@@ -34,10 +36,10 @@ public class LineDto implements Serializable {
 
     @FormParam("beginPeriod")
     @NotNull(message = "Begin period is required")
-    private Date beginPeriod = new Date();
+    private LocalDate beginPeriod = LocalDate.now();
 
     @FormParam("endPeriod")
-    private Date endPeriod;
+    private LocalDate endPeriod;
 
     @Min(1)
     @Max(30)
@@ -97,19 +99,19 @@ public class LineDto implements Serializable {
         this.frequency = frequency;
     }
 
-    public Date getBeginPeriod() {
+    public LocalDate getBeginPeriod() {
         return beginPeriod;
     }
 
-    public void setBeginPeriod(Date beginPeriod) {
+    public void setBeginPeriod(LocalDate beginPeriod) {
         this.beginPeriod = beginPeriod;
     }
 
-    public Date getEndPeriod() {
+    public LocalDate getEndPeriod() {
         return endPeriod;
     }
 
-    public void setEndPeriod(Date endPeriod) {
+    public void setEndPeriod(LocalDate endPeriod) {
         this.endPeriod = endPeriod;
     }
 

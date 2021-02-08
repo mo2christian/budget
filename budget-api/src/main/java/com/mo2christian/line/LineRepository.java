@@ -2,6 +2,7 @@ package com.mo2christian.line;
 
 import com.google.cloud.Timestamp;
 import com.google.cloud.datastore.*;
+import static com.mo2christian.common.Utils.*;
 import io.quarkus.cache.CacheInvalidateAll;
 import io.quarkus.cache.CacheResult;
 
@@ -75,13 +76,13 @@ public class LineRepository {
         line.setType(LineType.toLineType(toString(entity.getLong("type"))));
         line.setId(entity.getKey().getId());
         line.setFrequency((int)entity.getLong("frequency"));
-        line.setBeginPeriod(entity.getTimestamp("beginDate").toDate());
+        line.setBeginPeriod(toLocalDate(entity.getTimestamp("beginDate").toDate()));
         if (entity.contains("endDate")){
-            line.setEndPeriod(entity.getTimestamp("endDate").toDate());
+            line.setEndPeriod(toLocalDate(entity.getTimestamp("endDate").toDate()));
         }
         line.setLabel(entity.getString("label"));
         line.setWithdrawalDay((int)entity.getLong("withdrawalDay"));
-        line.setAmount(new BigDecimal(entity.getDouble("amount")));
+        line.setAmount(BigDecimal.valueOf(entity.getDouble("amount")));
         return line;
     }
 
@@ -95,10 +96,10 @@ public class LineRepository {
                 .set("frequency", line.getFrequency())
                 .set("amount", line.getAmount().doubleValue())
                 .set("withdrawalDay", line.getWithdrawalDay())
-                .set("beginDate", Timestamp.of(line.getBeginPeriod()))
+                .set("beginDate", Timestamp.of(toDate(line.getBeginPeriod())))
                 .set("type", line.getType().value());
         if (line.getEndPeriod() != null){
-            builder.set("endDate", Timestamp.of(line.getEndPeriod()));
+            builder.set("endDate", Timestamp.of(toDate(line.getEndPeriod())));
         }
         return (FullEntity<IncompleteKey>)builder.build();
 

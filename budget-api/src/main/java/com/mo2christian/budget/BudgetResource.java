@@ -1,5 +1,6 @@
 package com.mo2christian.budget;
 
+import com.mo2christian.common.Utils;
 import com.mo2christian.common.converter.DateParamConverter;
 import com.mo2christian.line.LineMapper;
 import com.mo2christian.line.LineService;
@@ -10,6 +11,7 @@ import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -29,22 +31,16 @@ public class BudgetResource {
 
     @GET
     @Path("/{period}")
-    public TemplateInstance index(@PathParam("period") Date date){
+    public TemplateInstance index(@PathParam("period") LocalDate date){
         return build(date);
     }
 
     @GET
     public TemplateInstance index(){
-        return build(new Date());
+        return build(LocalDate.now());
     }
 
-    private TemplateInstance build(Date date){
-        Calendar next = new GregorianCalendar();
-        next.setTime(date);
-        next.add(Calendar.MONTH, 1);
-        Calendar previous = new GregorianCalendar();
-        previous.setTime(date);
-        previous.add(Calendar.MONTH, -1);
+    private TemplateInstance build(LocalDate date){
         BudgetDto budgetDto = new BudgetDto();
         LineMapper mapper = new LineMapper();
         lineService.get(date)
@@ -53,8 +49,8 @@ public class BudgetResource {
                 .forEach(budgetDto::add);
         return budget.data("balance", budgetDto.getBalance())
                 .data("lines", budgetDto.getLines())
-                .data("previous", previous.getTime())
-                .data("next", next.getTime())
+                .data("previous", date.minusMonths(1L))
+                .data("next", date.plusMonths(1L))
                 .data("now", date)
                 .data("actualBalance", budgetDto.getActualBalance());
     }

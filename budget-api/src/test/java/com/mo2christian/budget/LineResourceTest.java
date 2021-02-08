@@ -8,6 +8,7 @@ import io.quarkus.test.junit.mockito.InjectMock;
 import org.junit.jupiter.api.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Date;
 
@@ -29,7 +30,7 @@ public class LineResourceTest {
         line.setAmount(BigDecimal.TEN);
         line.setLabel("Line");
         line.setWithdrawalDay(20);
-        line.setBeginPeriod(new Date());
+        line.setBeginPeriod(LocalDate.now());
         line.setFrequency(1);
         line.setId(1L);
         line.setType(LineType.CREDIT);

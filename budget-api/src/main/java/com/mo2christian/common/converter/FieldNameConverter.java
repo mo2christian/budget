@@ -9,15 +9,16 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.ext.ParamConverter;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 @ApplicationScoped
 public class FieldNameConverter implements ParamConverter<FieldConverter> {
 
-    private ParamConverter<Date> dateConverter;
+    private final ParamConverter<LocalDate> dateConverter;
 
     @Inject
-    public FieldNameConverter(ParamConverter<Date> dateConverter) {
+    public FieldNameConverter(ParamConverter<LocalDate> dateConverter) {
         this.dateConverter = dateConverter;
     }
 
@@ -82,16 +83,16 @@ public class FieldNameConverter implements ParamConverter<FieldConverter> {
         return fieldConverter;
     }
 
-    private FieldConverter<Date> beginDate(String name){
-        FieldConverter<Date> fieldConverter = new FieldConverter<>(name);
-        fieldConverter.setTransform(s -> dateConverter.fromString(s));
+    private FieldConverter<LocalDate> beginDate(String name){
+        FieldConverter<LocalDate> fieldConverter = new FieldConverter<>(name);
+        fieldConverter.setTransform(dateConverter::fromString);
         fieldConverter.setConsumer(Line::setBeginPeriod);
         return fieldConverter;
     }
 
-    private FieldConverter<Date> endDate(String name){
-        FieldConverter<Date> fieldConverter = new FieldConverter<>(name);
-        fieldConverter.setTransform(s -> dateConverter.fromString(s));
+    private FieldConverter<LocalDate> endDate(String name){
+        FieldConverter<LocalDate> fieldConverter = new FieldConverter<>(name);
+        fieldConverter.setTransform(dateConverter::fromString);
         fieldConverter.setConsumer(Line::setEndPeriod);
         return fieldConverter;
     }

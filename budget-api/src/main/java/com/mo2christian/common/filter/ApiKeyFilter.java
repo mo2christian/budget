@@ -23,7 +23,7 @@ public class ApiKeyFilter implements ContainerRequestFilter {
     String appKey;
 
     @Override
-    public void filter(ContainerRequestContext containerRequestContext) throws IOException {
+    public void filter(ContainerRequestContext containerRequestContext) {
         String key = containerRequestContext.getHeaders().getFirst(API_KEY);
         if (key == null || !key.equals(appKey))
             containerRequestContext.abortWith(Response.status(Response.Status.FORBIDDEN).build());
