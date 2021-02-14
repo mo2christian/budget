@@ -52,7 +52,7 @@ public class BudgetResource {
                 .data("previous", date.minusMonths(1L))
                 .data("next", date.plusMonths(1L))
                 .data("now", date)
-                .data("actualBalance", budgetDto.getActualBalance())
+                .data("balance", budgetDto.getActualBalance())
                 .data("toPay", budgetDto.getBillToPay())
                 .data("alreadyPayed", budgetDto.getBillPayed());
     }
