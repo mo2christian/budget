@@ -13,7 +13,7 @@ public enum LineType {
         this.label = label;
     }
 
-    public static LineType toLineType(String value){
+    public static LineType parse(String value){
         if (value == null || value.isEmpty())
             throw new IllegalArgumentException();
         switch (value.charAt(0)){

@@ -9,7 +9,7 @@ import javax.ws.rs.ext.ParamConverter;
 public class LineTypeConverter implements ParamConverter<LineType> {
     @Override
     public LineType fromString(String s) {
-        return LineType.toLineType(s);
+        return LineType.parse(s);
     }
 
     @Override

@@ -10,7 +10,6 @@ import javax.inject.Inject;
 import javax.ws.rs.ext.ParamConverter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
 
 @ApplicationScoped
 public class FieldNameConverter implements ParamConverter<FieldConverter> {
@@ -24,7 +23,7 @@ public class FieldNameConverter implements ParamConverter<FieldConverter> {
 
     @Override
     public FieldConverter fromString(String s) {
-        FieldName fieldName = FieldName.toFieldName(s);
+        FieldName fieldName = FieldName.parse(s);
         switch (fieldName){
             case LABEL:
                 return label(s);
@@ -64,7 +63,7 @@ public class FieldNameConverter implements ParamConverter<FieldConverter> {
 
     private FieldConverter<LineType> type(String name){
         FieldConverter<LineType> fieldConverter = new FieldConverter<>(name);
-        fieldConverter.setTransform(LineType::toLineType);
+        fieldConverter.setTransform(LineType::parse);
         fieldConverter.setConsumer(Line::setType);
         return fieldConverter;
     }

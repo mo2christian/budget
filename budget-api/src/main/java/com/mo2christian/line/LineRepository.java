@@ -73,7 +73,7 @@ public class LineRepository {
 
     private Line toLine(Entity entity){
         Line line = new Line();
-        line.setType(LineType.toLineType(toString(entity.getLong("type"))));
+        line.setType(LineType.parse(toString(entity.getLong("type"))));
         line.setId(entity.getKey().getId());
         line.setFrequency((int)entity.getLong("frequency"));
         line.setBeginPeriod(toLocalDate(entity.getTimestamp("beginDate").toDate()));

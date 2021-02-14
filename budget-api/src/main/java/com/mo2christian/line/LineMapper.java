@@ -1,7 +1,5 @@
 package com.mo2christian.line;
 
-import com.mo2christian.common.converter.DateParamConverter;
-
 public class LineMapper {
 
     public LineMapper(){

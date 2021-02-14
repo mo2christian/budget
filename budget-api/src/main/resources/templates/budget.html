@@ -58,7 +58,7 @@
             </td>
             <td>
                 {#if line.achieved}
-                <span style="color: green">Done</span>
+                <span style="color: green">Payed</span>
                 {/if}
             </td>
         </tr>
@@ -75,10 +75,18 @@
         </tr>
         <tr>
             <th scope="row" colspan="4">
-                Actual Balance
+                Bills to pay
             </th>
             <th>
-                {actualBalance}
+                {toPay}
+            </th>
+        </tr>
+        <tr>
+            <th scope="row" colspan="4">
+                Bills already payed
+            </th>
+            <th>
+                {alreadyPayed}
             </th>
         </tr>
     </tfoot>

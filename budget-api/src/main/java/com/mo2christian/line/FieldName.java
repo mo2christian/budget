@@ -12,7 +12,7 @@ public enum FieldName {
     END_DATE("end_date"),
     WITHDRAWAL_DAY("withdrawal_day");
 
-    private String name;
+    private final String name;
 
     private FieldName(String name){
         this.name = name;
@@ -22,7 +22,7 @@ public enum FieldName {
         return name;
     }
 
-    public static final FieldName toFieldName(String name){
+    public static FieldName parse(String name){
         return Stream.of(FieldName.values())
                 .filter(field -> field.name.equals(name))
                 .findFirst()

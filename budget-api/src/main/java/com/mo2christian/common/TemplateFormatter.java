@@ -3,11 +3,8 @@ package com.mo2christian.common;
 import com.mo2christian.line.LineType;
 import io.quarkus.qute.TemplateExtension;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 @TemplateExtension
 public class TemplateFormatter {
@@ -43,17 +40,6 @@ public class TemplateFormatter {
         if (frequency == 12)
             return "Each year";
         return String.format("Each %d months", frequency);
-    }
-
-    public static Date toDate(String value){
-        try{
-            if (value == null)
-                throw new IllegalArgumentException("Invalid date");
-            return new SimpleDateFormat(DATE_VALUE_PATTERN).parse(value.trim());
-        }
-        catch(ParseException ex){
-            throw new RuntimeException(ex);
-        }
     }
 
 }
