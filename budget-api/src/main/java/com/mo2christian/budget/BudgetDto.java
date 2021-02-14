@@ -5,6 +5,7 @@ import com.mo2christian.line.LineType;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.DateTimeException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.*;
@@ -72,12 +73,19 @@ public class BudgetDto implements Serializable {
     }
 
     private int prelevDate(LineDto line){
-        LocalDate prelev = LocalDate.now()
-                .withDayOfMonth(line.getWithdrawalDay());
-        if (prelev.getDayOfWeek() == DayOfWeek.SATURDAY){
+        LocalDate now = LocalDate.now();
+        LocalDate withDrawalDate;
+        if (now.lengthOfMonth() > line.getWithdrawalDay()){
+            withDrawalDate = now
+                    .withDayOfMonth(line.getWithdrawalDay());
+        }
+        else {
+            withDrawalDate = now.withDayOfMonth(now.lengthOfMonth());
+        }
+        if (withDrawalDate.getDayOfWeek() == DayOfWeek.SATURDAY){
             return line.getWithdrawalDay() + 2;
         }
-        if (prelev.getDayOfWeek() == DayOfWeek.SUNDAY){
+        if (withDrawalDate.getDayOfWeek() == DayOfWeek.SUNDAY){
             return line.getWithdrawalDay() + 1;
         }
         return line.getWithdrawalDay();
