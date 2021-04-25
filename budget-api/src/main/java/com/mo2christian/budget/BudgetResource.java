@@ -1,7 +1,6 @@
 package com.mo2christian.budget;
 
-import com.mo2christian.common.Utils;
-import com.mo2christian.common.converter.DateParamConverter;
+import com.mo2christian.line.Line;
 import com.mo2christian.line.LineMapper;
 import com.mo2christian.line.LineService;
 import io.quarkus.qute.Template;
@@ -12,9 +11,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.Comparator;
 
 @Path("/budget")
 public class BudgetResource {
@@ -45,6 +42,7 @@ public class BudgetResource {
         LineMapper mapper = new LineMapper();
         lineService.get(date)
                 .stream()
+                .sorted(Comparator.comparingInt(Line::getWithdrawalDay))
                 .map(mapper::toDto)
                 .forEach(budgetDto::add);
         return budget.data("balance", budgetDto.getBalance())

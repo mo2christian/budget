@@ -4,11 +4,11 @@ public enum LineType {
 
     CREDIT('c', "Crédit"), DEBIT('d', "Débit");
 
-    private char value;
+    private final char value;
 
-    private String label;
+    private final String label;
 
-    private LineType(char value, String label){
+    LineType(char value, String label){
         this.value = value;
         this.label = label;
     }

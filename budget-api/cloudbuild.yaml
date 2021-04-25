@@ -35,6 +35,4 @@ steps:
     - --clear-env-vars
 timeout: 600s
 substitutions:
-  _VERSION: '0.2.4'
-options:
-  machineType: 'N1_HIGHCPU_8'
+  _VERSION: '0.2.5'

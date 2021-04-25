@@ -14,7 +14,7 @@ public enum FieldName {
 
     private final String name;
 
-    private FieldName(String name){
+    FieldName(String name){
         this.name = name;
     }
 

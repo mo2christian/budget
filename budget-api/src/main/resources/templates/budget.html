@@ -30,6 +30,7 @@
         <tr>
             <th scope="col" colspan="2">Debit</th>
             <th scope="col" colspan="2">Credit</th>
+            <th scope="col" colspan="1">Date operation</th>
             <th scope="col" colspan="1">Status</th>
         </tr>
     </thead>
@@ -56,6 +57,7 @@
                     {line.amount}
                 {/if}
             </td>
+            <td>{line.withdrawalDay}</td>
             <td>
                 {#if line.achieved}
                 <span style="color: green">Payed</span>
@@ -66,7 +68,7 @@
     </tbody>
     <tfoot>
         <tr>
-            <th scope="row" colspan="4">
+            <th scope="row" colspan="5">
                 Balance
             </th>
             <th>
@@ -74,7 +76,7 @@
             </th>
         </tr>
         <tr>
-            <th scope="row" colspan="4">
+            <th scope="row" colspan="5">
                 Bills to pay
             </th>
             <th>
@@ -82,7 +84,7 @@
             </th>
         </tr>
         <tr>
-            <th scope="row" colspan="4">
+            <th scope="row" colspan="5">
                 Bills already payed
             </th>
             <th>
