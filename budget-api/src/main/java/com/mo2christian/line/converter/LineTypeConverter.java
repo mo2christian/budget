@@ -1,4 +1,4 @@
-package com.mo2christian.common.converter;
+package com.mo2christian.line.converter;
 
 import com.mo2christian.line.LineType;
 

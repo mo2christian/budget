@@ -16,6 +16,7 @@ import java.util.Optional;
 @ApplicationScoped
 public class LineRepository {
 
+    private final String CACHE_NAME = "line";
     private final String KIND = "Line";
     private final Datastore datastore;
 
@@ -24,7 +25,7 @@ public class LineRepository {
         this.datastore = datastore;
     }
 
-    @CacheInvalidateAll(cacheName = "line")
+    @CacheInvalidateAll(cacheName = CACHE_NAME)
     public void persist(Line line){
         IncompleteKey key = datastore.newKeyFactory()
                 .setKind(KIND)
@@ -32,7 +33,7 @@ public class LineRepository {
         datastore.add(toEntity(line, key));
     }
 
-    @CacheInvalidateAll(cacheName = "line")
+    @CacheInvalidateAll(cacheName = CACHE_NAME)
     public void update(Line line){
         Key key = datastore.newKeyFactory()
                 .setKind(KIND)
@@ -40,7 +41,7 @@ public class LineRepository {
         datastore.put(toEntity(line, key));
     }
 
-    @CacheResult(cacheName = "line")
+    @CacheResult(cacheName = CACHE_NAME)
     public List<Line> listAll(){
         StructuredQuery<Entity> query = Query.newEntityQueryBuilder().setKind(KIND).build();
         QueryResults<Entity> results = datastore.run(query);
@@ -52,7 +53,7 @@ public class LineRepository {
         return entities;
     }
 
-    @CacheInvalidateAll(cacheName = "line")
+    @CacheInvalidateAll(cacheName = CACHE_NAME)
     public void delete(Line line) {
         Key key = datastore.newKeyFactory()
                 .setKind(KIND)
@@ -60,7 +61,7 @@ public class LineRepository {
         datastore.delete(key);
     }
 
-    @CacheResult(cacheName = "line")
+    @CacheResult(cacheName = CACHE_NAME)
     public Optional<Line> findById(long id) {
         Key key = datastore.newKeyFactory()
                 .setKind(KIND)
