@@ -15,7 +15,6 @@ steps:
     - gcr.io/${PROJECT_ID}/budget-api:${_VERSION}
     - .
 - name: 'gcr.io/cloud-builders/docker'
-  dir: budget-webs
   id: Push image
   args:
     - push
@@ -23,7 +22,7 @@ steps:
 - name: 'gcr.io/cloud-builders/gcloud'
   id: Deploy app
   args:
-    - alpha
+    - beta
     - run
     - deploy
     - web
