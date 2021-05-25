@@ -31,8 +31,7 @@ steps:
     - --region=europe-west1
     - --project=${PROJECT_ID}
     - --service-account=budget@mybudget-monlabo-biz.iam.gserviceaccount.com
-    - --clear-cloudsql-instances
-    - --clear-env-vars
+    - --set-secrets=PWD=WEB_PWD:latest
 timeout: 600s
 substitutions:
   _VERSION: '0.2.5'

@@ -6,9 +6,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-public class Utils {
+public class DateUtils {
 
-    private Utils(){}
+    private DateUtils(){}
 
     public static Date endDate(Date date){
         Calendar cal = new GregorianCalendar();

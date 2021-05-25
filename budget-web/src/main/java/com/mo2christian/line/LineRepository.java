@@ -2,7 +2,7 @@ package com.mo2christian.line;
 
 import com.google.cloud.Timestamp;
 import com.google.cloud.datastore.*;
-import static com.mo2christian.common.Utils.*;
+import static com.mo2christian.common.DateUtils.*;
 import io.quarkus.cache.CacheInvalidateAll;
 import io.quarkus.cache.CacheResult;
 

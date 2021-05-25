@@ -1,7 +1,7 @@
 package com.mo2christian.line;
 
 import com.mo2christian.common.TemplateFormatter;
-import com.mo2christian.common.Utils;
+import com.mo2christian.common.DateUtils;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -30,7 +30,7 @@ public class LineService {
         //mettre la date de fin à la fin du mois
         if (line.getEndPeriod() != null){
             Calendar cal = new GregorianCalendar();
-            cal.setTime(Utils.toDate(line.getBeginPeriod()));
+            cal.setTime(DateUtils.toDate(line.getBeginPeriod()));
             line.setEndPeriod(line.getEndPeriod()
                     .withDayOfMonth(cal.getActualMaximum(Calendar.DAY_OF_MONTH)));
         }
