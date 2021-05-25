@@ -22,8 +22,8 @@ steps:
     - gcr.io/${PROJECT_ID}/budget-api:${_VERSION}
 - name: 'gcr.io/cloud-builders/gcloud'
   id: Deploy app
-  args:
-    - run
+  args:s
+    - alpha run
     - deploy
     - web
     - --image=gcr.io/${PROJECT_ID}/budget-api:${_VERSION}
