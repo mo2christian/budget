@@ -1,11 +1,11 @@
 steps:
 - name: 'gcr.io/cloud-builders/mvn'
-  dir: budget-api
+  dir: budget-web
   id: Package solution
   args:
     - package
 - name: 'gcr.io/cloud-builders/docker'
-  dir: budget-api
+  dir: budget-web
   id: Create container
   args:
     - build
@@ -15,7 +15,7 @@ steps:
     - gcr.io/${PROJECT_ID}/budget-api:${_VERSION}
     - .
 - name: 'gcr.io/cloud-builders/docker'
-  dir: budget-api
+  dir: budget-webs
   id: Push image
   args:
     - push
